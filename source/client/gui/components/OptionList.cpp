@@ -350,11 +350,7 @@ void OptionList::initMiscMenu()
 	int idxPano = -1;
 
 	OPTION(Boolean, m_bDebugText, "Debug Text");
-#ifdef ENH_JAVA_TITLE_LOGO
-	OPTION(Boolean, m_bOldTitleLogo, "Java Title Logo");
-#else
-	OPTION(Boolean, m_bOldTitleLogo, "Old Title Logo");
-#endif
+	OPTION(Boolean, m_bOldTitleLogo, "2D Title Logo");
 #ifdef ENH_MENU_BACKGROUND
 	OPTION(Boolean, m_bMenuPanorama, "Menu Panorama"); idxPano = currentIndex;
 #endif

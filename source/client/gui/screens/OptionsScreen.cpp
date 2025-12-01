@@ -34,8 +34,7 @@ void OptionsScreen::init()
 		SAFE_DELETE(m_pList);
 
 	m_pList = new OptionList(m_pMinecraft, m_width, m_height, 28, m_height - 28);
-	setCategory(m_currentCategory);
-
+	
 	int buttonWidth = 64;
 	int buttonHeight = 20;
 	int buttonSpacing = 5;
@@ -78,6 +77,8 @@ void OptionsScreen::init()
 	m_buttonTabList.push_back(&m_multiplayerButton);
 	m_buttonTabList.push_back(&m_miscButton);
 	m_buttonTabList.push_back(&m_backButton);
+
+	setCategory(m_currentCategory);
 }
 
 void OptionsScreen::render(int mouseX, int mouseY, float f)
@@ -88,30 +89,6 @@ void OptionsScreen::render(int mouseX, int mouseY, float f)
 	m_pList->render(mouseX, mouseY, f);
 
 	Screen::render(mouseX, mouseY, f);
-
-	Button* pButton = nullptr;
-	switch (m_currentCategory)
-	{
-	case OC_VIDEO:
-		pButton = &m_videoButton;
-		break;
-	case OC_CONTROLS:
-		pButton = &m_controlsButton;
-		break;
-	case OC_MULTIPLAYER:
-		pButton = &m_multiplayerButton;
-		break;
-	case OC_MISCELLANEOUS:
-		pButton = &m_miscButton;
-		break;
-	}
-
-	if (pButton)
-	{
-		// Original concept
-		//fill(pButton->m_xPos, pButton->m_yPos + pButton->m_height, pButton->m_xPos + pButton->m_width, pButton->m_yPos + pButton->m_height + 1, 0xFFFFFFFF);
-	}
-	drawCenteredString(m_pFont, "", m_width / 2, 10, 0xFFFFFF);
 }
 
 void OptionsScreen::removed()
@@ -123,13 +100,10 @@ void OptionsScreen::removed()
 
 void OptionsScreen::setCategory(OptionsCategory category)
 {
+	m_buttonTabList[m_currentCategory]->m_bEnabled = true;
 	m_currentCategory = category;
+	m_buttonTabList[m_currentCategory]->m_bEnabled = false;
 	m_pList->clear();
-
-	m_videoButton.m_bEnabled = m_currentCategory != OC_VIDEO;
-	m_controlsButton.m_bEnabled = m_currentCategory != OC_CONTROLS;
-	m_multiplayerButton.m_bEnabled = m_currentCategory != OC_MULTIPLAYER;
-	m_miscButton.m_bEnabled = m_currentCategory != OC_MISCELLANEOUS;
 
 	switch (category)
 	{

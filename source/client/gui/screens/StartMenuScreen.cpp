@@ -497,52 +497,23 @@ bool StartMenuScreen::isInGameScreen()
 void StartMenuScreen::drawLegacyTitle()
 {
 	Textures* tx = m_pMinecraft->m_pTextures;
-
 	bool crampedMode = false;
-#ifdef ENH_JAVA_TITLE_LOGO 
-	int titleYPos = 30; // -- MC Java position
 
-	tx->loadAndBindTexture("title/mclogo.png");
+	// Attempt to load Java logo first
+	int javaLogoId = tx->loadTexture("title/mclogo.png", false);
+	Texture* pJavaTex = tx->getTemporaryTextureData(javaLogoId);
 
-	int width = 274;
-	int leftPos = m_width / 2 - width / 2;
-
-	if (m_width * 3 / 4 < width)
+	if (pJavaTex)
 	{
-		crampedMode = true;
-		titleYPos = 4;
-	}
-
-	Tesselator& t = Tesselator::instance;
-	glColor4f(1, 1, 1, 1);
-	t.begin();
-	t.vertexUV(leftPos,        titleYPos + 44, 0, 0.0f,         44.0f / 256.0f);
-	t.vertexUV(leftPos + 155,  titleYPos + 44, 0, 155.0f / 256.0f, 44.0f / 256.0f);
-	t.vertexUV(leftPos + 155,  titleYPos,      0, 155.0f / 256.0f, 0.0f);
-	t.vertexUV(leftPos,        titleYPos,      0, 0.0f,         0.0f);
-	t.vertexUV(leftPos + 155, titleYPos + 44, 0, 0.0f,         (45.0f + 44.0f) / 256.0f);
-	t.vertexUV(leftPos + 310, titleYPos + 44, 0, 155.0f / 256.0f, (45.0f + 44.0f) / 256.0f);
-	t.vertexUV(leftPos + 310, titleYPos,      0, 155.0f / 256.0f, 45.0f / 256.0f);
-	t.vertexUV(leftPos + 155, titleYPos,      0, 0.0f,         45.0f / 256.0f);
-	t.draw();
-#else
-	//int titleYPos = 4;
-	int titleYPos = 15;
-
-	int id = tx->loadTexture("gui/title.png", true);
-	Texture* pTex = tx->getTemporaryTextureData(id);
-
-	if (pTex)
-	{
-		if (id != tx->m_currBoundTex)
+		if (javaLogoId != tx->m_currBoundTex)
 		{
-			glBindTexture(GL_TEXTURE_2D, id);
-			tx->m_currBoundTex = id;
+			glBindTexture(GL_TEXTURE_2D, javaLogoId);
+			tx->m_currBoundTex = javaLogoId;
 		}
-
-		int left = (m_width - pTex->m_width) / 2;
-		int width = pTex->m_width;
-		int height = pTex->m_height;
+		
+		int titleYPos = 30; // -- MC Java position
+		int width = 274;
+		int leftPos = m_width / 2 - width / 2;
 
 		if (m_width * 3 / 4 < width)
 		{
@@ -553,13 +524,51 @@ void StartMenuScreen::drawLegacyTitle()
 		Tesselator& t = Tesselator::instance;
 		glColor4f(1, 1, 1, 1);
 		t.begin();
-		t.vertexUV(left, height + titleYPos, field_4, 0.0f, 1.0f);
-		t.vertexUV(left + width, height + titleYPos, field_4, 1.0f, 1.0f);
-		t.vertexUV(left + width, titleYPos, field_4, 1.0f, 0.0f);
-		t.vertexUV(left, titleYPos, field_4, 0.0f, 0.0f);
+		t.vertexUV(leftPos,       titleYPos + 44, 0, 0.0f,          44.0f / 256.0f);
+		t.vertexUV(leftPos + 155, titleYPos + 44, 0, 155.0f / 256.0f, 44.0f / 256.0f);
+		t.vertexUV(leftPos + 155, titleYPos,      0, 155.0f / 256.0f, 0.0f);
+		t.vertexUV(leftPos,       titleYPos,      0, 0.0f,          0.0f);
+		t.vertexUV(leftPos + 155, titleYPos + 44, 0, 0.0f,          (45.0f + 44.0f) / 256.0f);
+		t.vertexUV(leftPos + 310, titleYPos + 44, 0, 155.0f / 256.0f, (45.0f + 44.0f) / 256.0f);
+		t.vertexUV(leftPos + 310, titleYPos,      0, 155.0f / 256.0f, 45.0f / 256.0f);
+		t.vertexUV(leftPos + 155, titleYPos,      0, 0.0f,          45.0f / 256.0f);
 		t.draw();
 	}
-#endif
+	else
+	{
+		// Fallback to PE logo
+		int titleYPos = 15;
+		int id = tx->loadTexture("gui/title.png", true);
+		Texture* pTex = tx->getTemporaryTextureData(id);
+
+		if (pTex)
+		{
+			if (id != tx->m_currBoundTex)
+			{
+				glBindTexture(GL_TEXTURE_2D, id);
+				tx->m_currBoundTex = id;
+			}
+
+			int left = (m_width - pTex->m_width) / 2;
+			int width = pTex->m_width;
+			int height = pTex->m_height;
+
+			if (m_width * 3 / 4 < width)
+			{
+				crampedMode = true;
+				titleYPos = 4;
+			}
+
+			Tesselator& t = Tesselator::instance;
+			glColor4f(1, 1, 1, 1);
+			t.begin();
+			t.vertexUV(left,         height + titleYPos, field_4, 0.0f, 1.0f);
+			t.vertexUV(left + width, height + titleYPos, field_4, 1.0f, 1.0f);
+			t.vertexUV(left + width, titleYPos,          field_4, 1.0f, 0.0f);
+			t.vertexUV(left,         titleYPos,          field_4, 0.0f, 0.0f);
+			t.draw();
+		}
+	}
 }
 
 void StartMenuScreen::render(int a, int b, float c)
@@ -571,12 +580,7 @@ void StartMenuScreen::render(int a, int b, float c)
 	renderMenuBackground(c);
 #endif
 
-	//int titleYPos = 4;
-#ifdef ENH_JAVA_TITLE_LOGO 
-	int titleYPos = 30; // -- MC Java position.
-#else
 	int titleYPos = 15;
-#endif
 	bool crampedMode = false;
 
 	if (m_width * 3 / 4 < 256)
@@ -679,7 +683,7 @@ void StartMenuScreen::draw3dTitle(float f)
 		glScalef(0.89f, 1.0f, 0.4f);
 		glTranslatef(-Width * 0.5f, -Height * 0.5f, 0.0f);
 
-		m_pMinecraft->m_pTextures->loadAndBindTexture("terrain.png");
+		m_pMinecraft->m_pTextures->loadAndBindTexture(C_TERRAIN_NAME);
 		if (i == 0) {
 			m_pMinecraft->m_pTextures->loadAndBindTexture("gui/black.png");
 		}

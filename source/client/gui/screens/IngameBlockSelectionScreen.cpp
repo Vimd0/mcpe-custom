@@ -227,8 +227,9 @@ void IngameBlockSelectionScreen::mouseReleased(int x, int y, int type)
 	if (type != 1)
 		return;
 
-	for (Button* btn : m_buttons)
+	for (std::vector<Button*>::iterator i = m_buttons.begin(); i != m_buttons.end(); ++i)
 	{
+		Button* btn = *i;
 		if (btn->clicked(m_pMinecraft, x, y))
 			return;
 	}
