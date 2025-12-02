@@ -356,7 +356,11 @@ const char* gSplashes[] =
 	"Check out our GitHub!",
 	"Woo, newgrounds!",
 	"Woo, curseforge!",
-	"Nostalgic!"
+	"Nostalgic!",
+	"I ... am Steve!",
+	"Flint and steel!"
+	"Also try RePocket!",
+	"Also try PEtoLE!"
 };
 
 StartMenuScreen::StartMenuScreen() :
@@ -471,8 +475,8 @@ void StartMenuScreen::init()
 	for (int i = 0; i < int(m_buttons.size()); i++)
 		m_buttonTabList.push_back(m_buttons[i]);
 
-	field_154 = "\xFFMojang AB";
-	field_16C = m_width - 1 - m_pFont->width(field_154);
+	field_154 = "Not affiliated with Mojang AB"; // we're not
+	field_16C = 1;
 
 	field_170 = m_pMinecraft->getVersionString();
 #ifdef DEMO
@@ -480,7 +484,7 @@ void StartMenuScreen::init()
 #endif
 		;
 
-	field_188 = (m_width - m_pFont->width(field_170)) / 2;
+	field_188 = 1;
 
 #if !defined(DEMO) && defined(CAN_QUIT)
 	m_buyButton.m_text = "Quit";
@@ -500,6 +504,7 @@ void StartMenuScreen::drawLegacyTitle()
 	bool crampedMode = false;
 
 	// Attempt to load Java logo first
+	int titleYPos = 30; // -- MC Java position
 	int javaLogoId = tx->loadTexture("title/mclogo.png", false);
 	Texture* pJavaTex = tx->getTemporaryTextureData(javaLogoId);
 
@@ -510,10 +515,9 @@ void StartMenuScreen::drawLegacyTitle()
 			glBindTexture(GL_TEXTURE_2D, javaLogoId);
 			tx->m_currBoundTex = javaLogoId;
 		}
-		
-		int titleYPos = 30; // -- MC Java position
+
 		int width = 274;
-		int leftPos = m_width / 2 - width / 2;
+		int left = m_width / 2 - width / 2;
 
 		if (m_width * 3 / 4 < width)
 		{
@@ -524,14 +528,14 @@ void StartMenuScreen::drawLegacyTitle()
 		Tesselator& t = Tesselator::instance;
 		glColor4f(1, 1, 1, 1);
 		t.begin();
-		t.vertexUV(leftPos,       titleYPos + 44, 0, 0.0f,          44.0f / 256.0f);
-		t.vertexUV(leftPos + 155, titleYPos + 44, 0, 155.0f / 256.0f, 44.0f / 256.0f);
-		t.vertexUV(leftPos + 155, titleYPos,      0, 155.0f / 256.0f, 0.0f);
-		t.vertexUV(leftPos,       titleYPos,      0, 0.0f,          0.0f);
-		t.vertexUV(leftPos + 155, titleYPos + 44, 0, 0.0f,          (45.0f + 44.0f) / 256.0f);
-		t.vertexUV(leftPos + 310, titleYPos + 44, 0, 155.0f / 256.0f, (45.0f + 44.0f) / 256.0f);
-		t.vertexUV(leftPos + 310, titleYPos,      0, 155.0f / 256.0f, 45.0f / 256.0f);
-		t.vertexUV(leftPos + 155, titleYPos,      0, 0.0f,          45.0f / 256.0f);
+		t.vertexUV(left,       titleYPos + 44, 0, 0.0f,          44.0f / 256.0f);
+		t.vertexUV(left + 155, titleYPos + 44, 0, 155.0f / 256.0f, 44.0f / 256.0f);
+		t.vertexUV(left + 155, titleYPos,      0, 155.0f / 256.0f, 0.0f);
+		t.vertexUV(left,       titleYPos,      0, 0.0f,          0.0f);
+		t.vertexUV(left + 155, titleYPos + 44, 0, 0.0f,          (45.0f + 44.0f) / 256.0f);
+		t.vertexUV(left + 310, titleYPos + 44, 0, 155.0f / 256.0f, (45.0f + 44.0f) / 256.0f);
+		t.vertexUV(left + 310, titleYPos,      0, 155.0f / 256.0f, 45.0f / 256.0f);
+		t.vertexUV(left + 155, titleYPos,      0, 0.0f,          45.0f / 256.0f);
 		t.draw();
 	}
 	else
@@ -594,7 +598,7 @@ void StartMenuScreen::render(int a, int b, float c)
 	else
 		draw3dTitle(c);
 
-	drawString(m_pFont, field_170, field_188, 58 + titleYPos, 0xFFCCCCCC);
+	drawString(m_pFont, field_170, field_188, m_height - 20, 0x00FFFFFF);
 	drawString(m_pFont, field_154, field_16C, m_height - 10, 0x00FFFFFF);
 
 	// Draw the splash text, if we have enough room.

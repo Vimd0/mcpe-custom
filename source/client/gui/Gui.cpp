@@ -297,19 +297,26 @@ void Gui::render(float f, bool bHaveScreen, int mouseX, int mouseY)
 			b1 = player->m_invulnerableTime / 3 % 2;
 			emptyHeartX += 9 * b1;
 		}
-#if defined(ANDROID) || defined(TARGET_OS_IPHONE)
-		//@NOTE: Pocket-style health UI.
-		int heartX = 2;
-		int heartYStart = 2;
-#else
-		// @NOTE: At the default scale, this would go off screen.
-		int heartX = cenX - 191; // why?
-		int heartYStart = height - 10;
 
-		//@NOTE: Alpha-style health UI. I'll probably remove this on release.
-		heartX = cenX - hotbarWidth / 2;
-		heartYStart = height - 32;
-#endif
+		// render the survival hearts
+		int heartX, heartYStart;
+		if (mc->isTouchscreen())
+		{
+			//@NOTE: 0.5.0 Pocket-style health UI.
+			heartX = 2;
+			heartYStart = 2;
+		}
+		else
+		{
+			// @NOTE: At the default scale, this would go off screen.
+			heartX = cenX - 191; // why?
+			heartYStart = height - 10;
+
+			//@NOTE: Alpha-style health UI. I'll probably remove this on release.
+			heartX = cenX - hotbarWidth / 2;
+			heartYStart = height - 32;
+		}
+
 		int playerHealth = player->m_health;
 
 		for (int healthNo = 1; healthNo <= C_MAX_MOB_HEALTH; healthNo += 2)
@@ -342,16 +349,23 @@ void Gui::render(float f, bool bHaveScreen, int mouseX, int mouseY)
 			int breathRaw = player->m_airCapacity;
 			int breathFull  = int(ceilf((float(breathRaw - 2) * 10.0f) / 300.0f));
 			int breathMeter = int(ceilf((float(breathRaw)     * 10.0f) / 300.0f)) - breathFull;
-#if defined(ANDROID) || defined(TARGET_OS_IPHONE)
-			int bubbleX = 2;
-			int bubbleY = 12;
-#else
-			int bubbleX = cenX - 191;
-			int bubbleY = height - 19;
 
-			bubbleX = cenX - hotbarWidth / 2;
-			bubbleY = height - 41;
-#endif
+			// render the survival bubbles
+			int bubbleX, bubbleY;
+			if (mc->isTouchscreen())
+			{
+				bubbleX = 2;
+				bubbleY = 12;
+			}
+			else
+			{
+				bubbleX = cenX - 191;
+				bubbleY = height - 19;
+
+				bubbleX = cenX - hotbarWidth / 2;
+				bubbleY = height - 41;
+			}
+
 			//@NOTE: Not sure this works as it should
 
 			for (int bubbleNo = 0; bubbleNo < breathFull + breathMeter; bubbleNo++)

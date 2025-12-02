@@ -40,26 +40,15 @@ void OptionsScreen::init()
 	int buttonSpacing = 5;
 	int totalWidth = (buttonWidth * 4) + (buttonSpacing * 3);
 	int startX = (m_width - totalWidth) / 2;
-
-	m_videoButton.m_width = buttonWidth;
-	m_videoButton.m_height = buttonHeight;
-	m_videoButton.m_xPos = startX;
-	m_videoButton.m_yPos = 4.3;
-
-	m_controlsButton.m_width = buttonWidth;
-	m_controlsButton.m_height = buttonHeight;
-	m_controlsButton.m_xPos = startX + buttonWidth + buttonSpacing;
-	m_controlsButton.m_yPos = 4.3;
-
-	m_multiplayerButton.m_width = buttonWidth;
-	m_multiplayerButton.m_height = buttonHeight;
-	m_multiplayerButton.m_xPos = startX + (buttonWidth + buttonSpacing) * 2;
-	m_multiplayerButton.m_yPos = 4.3;
-
-	m_miscButton.m_width = buttonWidth;
-	m_miscButton.m_height = buttonHeight;
-	m_miscButton.m_xPos = startX + (buttonWidth + buttonSpacing) * 3;
-	m_miscButton.m_yPos = 4.3;
+	
+	Button* buttons[] = { &m_videoButton, &m_controlsButton, &m_multiplayerButton, &m_miscButton };
+	for (int i = 0; i < 4; ++i)
+	{
+		buttons[i]->m_width = buttonWidth;
+		buttons[i]->m_height = buttonHeight;
+		buttons[i]->m_xPos = startX + (buttonWidth + buttonSpacing) * i;
+		buttons[i]->m_yPos = 4.3;
+	}
 
 	m_backButton.m_width = 100;
 	m_backButton.m_height = 20;
