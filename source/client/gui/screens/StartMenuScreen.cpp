@@ -359,7 +359,7 @@ const char* gSplashes[] =
 	"Nostalgic!",
 	"I ... am Steve!",
 	"Flint and steel!",
-	"Also try Minecraft Pi Reborn!"
+	"Also try Minecraft Pi Reborn!",
 	"Also try RePocket!",
 	"Also try PEtoLE!"
 };
